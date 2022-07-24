@@ -1,0 +1,14 @@
+{
+  "listen": ":port",
+  "cert": "/etc/hysteria/cert/fullchain.cer",
+  "key": "/etc/hysteria/cert/private.key",
+  "auth": {
+    "mode": "passwords",
+    "config": [
+      "password"
+    ]
+  },
+  "alpn": "quic",
+  "up_mbps": 1000,
+  "down_mbps": 1000
+}
