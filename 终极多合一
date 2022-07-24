@@ -1,0 +1,78 @@
+version: "3.8"
+
+services:
+  Aria2-Pro:
+    container_name: aria2-pro
+    image: p3terx/aria2-pro
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - UMASK_SET=022
+      - RPC_SECRET=P3TERX
+      - RPC_PORT=6800
+      - LISTEN_PORT=8964
+      - DISK_CACHE=64M
+      - IPV6_MODE=true
+      - UPDATE_TRACKERS=false
+      - CUSTOM_TRACKER_URL=
+      - TZ=Asia/Shanghai
+    volumes:
+      - aria2-config:/config
+      - aria2-downloads:/downloads
+    network_mode: host
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+
+  AriaNg:
+    container_name: ariang
+    image: p3terx/ariang
+    command: --port 6880 --ipv6
+    network_mode: host
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 1m
+
+  caddy:
+    image: caddy:latest
+    restart: unless-stopped
+    network_mode: "host"
+    volumes:
+      - /root/Caddyfile:/etc/caddy/Caddyfile
+      - aria2-downloads:/srv
+      - caddy-data:/data
+      - caddy-config:/config
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+      - WEBUI_PORT=8080
+    volumes:
+      - qbit-config:/config
+      - aria2-downloads:/downloads
+    network_mode: "host"
+    restart: unless-stopped
+
+  hysteria:
+    build: .
+    container_name: hysteria
+    restart: unless-stopped
+    network_mode: "host"
+    volumes:
+      - /root/hysteria/config.json:/etc/hysteria/config.json
+      - caddy-data:/etc/hysteria/cert
+
+volumes:
+  aria2-config:
+  aria2-downloads:
+  qbit-config:
+  caddy-data:
+  caddy-config:
