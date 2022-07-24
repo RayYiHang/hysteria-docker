@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  hysteria:
+    build: .
+    container_name: hysteria
+    restart: always
+    network_mode: "host"
+    volumes:
+      - /root/hysteria/config.json:/etc/hysteria/config.json
+      - /root/hysteria/cert:/etc/hysteria/cert
