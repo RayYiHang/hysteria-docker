@@ -42,7 +42,7 @@ services:
     restart: unless-stopped
     network_mode: "host"
     volumes:
-      - /root/Caddyfile:/etc/caddy/Caddyfile
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
       - aria2-downloads:/srv
       - caddy-data:/data
       - caddy-config:/config
@@ -67,7 +67,7 @@ services:
     restart: unless-stopped
     network_mode: "host"
     volumes:
-      - /root/hysteria/config.json:/etc/hysteria/config.json
+      - $PWD/config.json:/etc/hysteria/config.json
       - caddy-data:/etc/hysteria/cert
 
 volumes:
